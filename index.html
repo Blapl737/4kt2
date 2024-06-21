@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Slider</title>
+<style>
+    #sliderContainer {
+        margin-top: 50vh;
+        text-align: center;
+    }
+    #slider {
+        width: 300px;
+        height: 20px;
+        background-color: #ccc;
+        position: relative;
+    }
+    #knob {
+        width: 20px;
+        height: 20px;
+        background-color: #333;
+        position: absolute;
+        cursor: pointer;
+    }
+    #value {
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+<div id="sliderContainer">
+    <div id="slider">
+        <div id="knob"></div>
+    </div>
+    <div id="value">0%</div>
+</div>
+
+<script>
+    const slider = document.getElementById('slider');
+    const knob = document.getElementById('knob');
+    const value = document.getElementById('value');
+
+    let isDragging = false;
+
+    knob.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        document.addEventListener('mousemove', moveKnob);
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            document.removeEventListener('mousemove', moveKnob);
+        });
+    });
+
+    function moveKnob(e) {
+        const sliderRect = slider.getBoundingClientRect();
+        let position = (e.clientX - sliderRect.left) / sliderRect.width * 100;
+        
+        if (position < 0) {
+            position = 0;
+        } else if (position > 100) {
+            position = 100;
+        }
+        
+        knob.style.left = `${position}%`;
+        value.innerHTML = `${Math.round(position)}%`;
+    }
+</script>
+</body>
+</html>
